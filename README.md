@@ -1,7 +1,7 @@
 # yuriapi
 Kinda stupid api made in C++/nginx for generate yuri pictures. (Not really)
 # WARNING
-If you are not yuri enjoyer and NOT like same-sex pictures, please go away ;-;
+If you are not yuri enjoyer and NOT like same-sex love pictures, please go away ;-;
 # I want to use api without deployed to my device, do you have demo/deployed one?
 https://noidea.deeka.me
 # How much api for this (right now state)
