@@ -1,4 +1,4 @@
-/*Copyright? Free to use >3*/
+/*LICENSE? MIT >3*/
 /*How to compile? >> g++ -std=c++11 main.cpp -I/usr/include -L/usr/lib -lpthread -o webserver*/
 #include <iostream>
 #include <string>
