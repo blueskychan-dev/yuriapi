@@ -70,23 +70,7 @@ int main() {
         iss >> method >> path; // Extract method and path
 
         // Handle request 
-        if (method == "GET" && (path == "/" || path == "/index.html")) {
-            // Load index.html
-            ifstream file("index.html");
-            string html_content;
-            if (file.is_open()) {
-                getline(file, html_content, '\0'); // Read entire file
-                file.close();
-            }
-
-            // Send HTTP response
-            string response = "HTTP/1.1 200 OK\r\n"
-                              "Content-Type: text/html\r\n"
-                              "Content-Length: " + to_string(html_content.size()) + "\r\n"
-                              "\r\n" + html_content;
-            send(client_socket, response.c_str(), response.size(), 0);
-        } 
-        else if (method == "GET" && path == "/api/yuriwallpaper") {
+        if (method == "GET" && path == "/api/yuriwallpaper") {
             // random while 001 to 160
             int random = rand() % 160 + 1;
             // return with json like {"url": "https://noidea.deeka.me/cdn/yuriwallpaper/001.jpg"}
