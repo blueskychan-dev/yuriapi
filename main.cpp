@@ -1,5 +1,5 @@
-/*LICENSE? MIT >3*/
-/*How to compile? >> g++ -std=c++11 main.cpp -I/usr/include -L/usr/lib -lpthread -o webserver*/
+/* Copyright? MIT >3 */
+/* How to compile? >> g++ -std=c++11 main.cpp -I/usr/include -L/usr/lib -lpthread -o webserver */
 #include <iostream>
 #include <string>
 #include <sys/socket.h>
@@ -11,8 +11,8 @@
 
 using namespace std;
 
-// This is very, very raw and sucks project in C++, however beloved api lol
-std::string api_version = "1.0.0-yuribeloved";
+// Some montherfucker in discord want to attack my stuff, let him 1v1 with C++ then.
+std::string api_version = "1.1.0-attackerkys";
 
 std::string exec(const char* cmd) {
     /*Credit to https://gist.github.com/meritozh/f0351894a2a4aa92871746bf45879157 >_<*/
@@ -28,6 +28,19 @@ std::string exec(const char* cmd) {
 }
 
 int main() {
+    // Loading index.txt because attack should cry
+    ifstream file("index.txt");
+    string txt_content;
+    printf("Loading index.txt\n");
+    // show index.txt content
+    if (file.is_open()) {
+        getline(file, txt_content, '\0'); // Read entire file
+        file.close();
+        cout << txt_content << endl;
+    }
+    else {
+        cout << "Failed to load index.txt\n";
+    }
     // Create a socket
     int server_socket = socket(AF_INET, SOCK_STREAM, 0);
     if (server_socket == -1) {
@@ -70,6 +83,7 @@ int main() {
         iss >> method >> path; // Extract method and path
 
         // Handle request 
+        
         if (method == "GET" && path == "/api/yuriwallpaper") {
             // random while 001 to 160
             int random = rand() % 160 + 1;
@@ -100,13 +114,42 @@ int main() {
                               "\r\n" + json_response;
             send(client_socket, response.c_str(), response.size(), 0);
         }
-        else {
-            // Send 404 Not Found
-            string response = "HTTP/1.1 404 Not Found\r\n"
-                              "Content-Length: 0\r\n"
-                              "\r\n";
-            send(client_socket, response.c_str(), response.size(), 0);
+        // cdn/yuriwallpaper/*.jpg
+        else if (method == "GET" && path.find("/cdn/yuriwallpaper/") == 0) {
+            /* If attacker know, u need 1TiB of ram then */
+            string file_path = path.substr(1); // Remove leading slash
+            ifstream file(file_path, ios::binary);
+            string content;
+            // Send index.txt file
+                if (file.is_open()) {
+                    ostringstream datajpeg;
+                    datajpeg << file.rdbuf();
+                    // debug how much bytes loaded
+                    cout << "Loaded " << datajpeg.str().size() << " bytes\n";
+                    // send to client with jpeg content type
+                    string response = "HTTP/1.1 200 OK\r\n"
+                                      "Content-Type: image/jpeg\r\n"
+                                      "Content-Length: " + to_string(datajpeg.str().size()) + "\r\n"
+                                      "\r\n" + datajpeg.str();
+                    send(client_socket, response.c_str(), response.size(), 0);
+                    // Delete image from memory
+                    datajpeg.str("");
+                }
+                else {
+                    string response = "HTTP/1.1 404 Not Found\r\n"
+                                      "Content-Type: text/plain\r\n"
+                                      "Content-Length: 9\r\n"
+                                      "\r\nNot found";
+                    send(client_socket, response.c_str(), response.size(), 0);
+                }
         }
+        else {
+                string response = "HTTP/1.1 200 OK\r\n"
+                                  "Content-Type: text/plain\r\n"
+                                  "Content-Length: " + to_string(txt_content.size()) + "\r\n"
+                                  "\r\n" + txt_content;
+                send(client_socket, response.c_str(), response.size(), 0);
+        } 
 
         close(client_socket); 
     }
