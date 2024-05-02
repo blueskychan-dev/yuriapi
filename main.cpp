@@ -36,7 +36,6 @@ int main() {
     if (file.is_open()) {
         getline(file, txt_content, '\0'); // Read entire file
         file.close();
-        cout << txt_content << endl;
     }
     else {
         cout << "Failed to load index.txt\n";
@@ -124,8 +123,6 @@ int main() {
                 if (file.is_open()) {
                     ostringstream datajpeg;
                     datajpeg << file.rdbuf();
-                    // debug how much bytes loaded
-                    cout << "Loaded " << datajpeg.str().size() << " bytes\n";
                     // send to client with jpeg content type
                     string response = "HTTP/1.1 200 OK\r\n"
                                       "Content-Type: image/jpeg\r\n"
